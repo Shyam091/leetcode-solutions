@@ -2,49 +2,61 @@ class Solution {
 public:
     int ans = INT_MAX;
 
-    // for memoization we just need to memorize the current path result.
-    vector<vector<int>>v;
+    // now we are done with the memoization part, we need to now more optmized it, with tabulation method.
+    // we will use a 2d vector. named dp.
+    vector<vector<int>>dp;
 
-    int backtrack(string& w1, string& w2, int n , int m, int i, int j)
-    {
-       if( i>=n )
-       {
-        return m-j;
-       }
 
-       if(j>=m)
-       {
-        return n-i;
-       }
-
-        if(v[i][j] == -1)
-        {
-
-        if(w1[i] == w2[j])
-        {
-            return v[i][j] = 0 + backtrack(w1, w2, n, m, i+1, j+1); // matched
-        }
-        else{ 
-
-           return  v[i][j] = min({1+ backtrack(w1, w2, n, m, i, j+1)      ,1+ backtrack(w1,w2, n , m,i+1,j)   ,1+ backtrack(w1, w2, n, m , i+1, j+1) });
-        }
-
-        }
-
-        return v[i][j];
-    }
     int minDistance(string word1, string word2) {
 
 
     int n = word1.size();
     int m = word2.size();
-    v.assign(n+1, vector<int>(m+1, -1));
+    dp.assign(n+1, vector<int>(m+1, 0));
+    // for dp part, we need to know about the base case.
 
+    //  there are two base cases,
+    // 1 if word2 is travered - then return m-j(m = word2, j=current index at word2)
+    // 2 if word1 is travered - vice vera.
 
+    for(int i=0;i<n+1;i++)
+    {
+        
+         dp[i][0]=i;
 
-
-
-    return backtrack(word1, word2, n , m, 0, 0);
-
+      
     }
+
+    for(int j=0;j<m+1;j++)
+    {
+        dp[0][j]=j;
+    }
+
+    for(int i=1;i<n+1;i++)
+    {
+        for(int j=1;j<m+1;j++)
+        {
+            if(word1[i-1] == word2[j-1])
+            {
+                dp[i][j]=dp[i-1][j-1];
+            }
+
+            else{
+                dp[i][j]=min({1+dp[i][j-1], 1+dp[i-1][j-1], 1+dp[i-1][j]});
+            }
+
+        }
+    }
+
+        return dp[n][m];
+    }
+
+
+
+
+
+
+
+
+    
 };
