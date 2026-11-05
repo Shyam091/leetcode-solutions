@@ -4,34 +4,40 @@ public:
         int n = arr1.size();
         int m = arr2.size();
         int ans = 0;
-        bool flag = false;
+        
+        sort(arr2.begin() , arr2.end());
 
-        sort(arr1.begin(), arr1.end());
-        sort(arr2.begin(), arr2.end());
+        for(int i=0;i<n;i++)
+        {
+            int l = arr1[i] - d;
+            int r = arr1[i] + d;
+            int left = 0;
+            int right = m-1;
+            bool found =  false ;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = m - 1; j >= 0; j--) {
-                if (abs(arr1[i] - arr2[j]) > d) {
-                    if (j == 0) {
-                        ans++;
-                    }
+            while(left<=right)
+            {
+                int mid = (left + right) / 2;
+                if(arr2[mid] <= r && arr2[mid] >= l )
+                {
+                    found = true ;
+                    break ;
+                }
+                else if(arr2[mid] > r )
+                {
+                    right = mid - 1;
                 }
 
-                else {
-                    break;
-                }
-            }
+                else if(arr2[mid] < l)
+                {
 
-            if (flag) {
-                break;
-            }
+                    left = mid + 1;
+                }
+
+            }     
+
+            if(!found) ans++;   
         }
-
-        return ans;
+        return ans ;
     }
-
-    // 1,2,3,4
-    // -4, -3, 6, 10, 20 ,30
-
-    // 4 5 8 : 1 8 9 10
 };
